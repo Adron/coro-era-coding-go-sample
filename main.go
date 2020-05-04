@@ -8,6 +8,7 @@ import (
 
 func main() {
 	http.HandleFunc("/", RootHandler)
+	http.HandleFunc("/check", HealthHandler)
 	http.HandleFunc("/response", ResponseExampleHandler)
 	http.HandleFunc("/errexample", ErrorResponseHandler)
 	http.ListenAndServe(":8080", nil)
@@ -36,4 +37,10 @@ func ResponseExampleHandler(w http.ResponseWriter, r *http.Request) {
 func ErrorResponseHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(500)
 	fmt.Fprintln(w, "Server error.")
+}
+
+func HealthHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(200)
+	w.Header().Set("Content-Type", "application/json")
+	_, _ = fmt.Fprint(w, `{"alive":true}`)
 }
